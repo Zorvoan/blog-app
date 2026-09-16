@@ -69,10 +69,12 @@ export async function updateUser(
 const SESSION_KEY = "cms-session";
 
 export function saveSession(session: Session): void {
+  if (typeof localStorage === "undefined") return;
   localStorage.setItem(SESSION_KEY, JSON.stringify(session));
 }
 
 export function loadSession(): Session | null {
+  if (typeof localStorage === "undefined") return null;
   const raw = localStorage.getItem(SESSION_KEY);
   if (!raw) return null;
   try {
@@ -83,5 +85,6 @@ export function loadSession(): Session | null {
 }
 
 export function clearSession(): void {
+  if (typeof localStorage === "undefined") return;
   localStorage.removeItem(SESSION_KEY);
 }

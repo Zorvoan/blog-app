@@ -4,8 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "node server.ts",
+    "dev:client": "vite",
+    "build": "npm run build:ssr",
+    "build:client": "vite build",
+    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
+    "build:ssr": "npm run build:client && npm run build:server",
+    "start": "NODE_ENV=production node server.ts",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
@@ -13,12 +18,17 @@
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
     "@supabase/supabase-js": "^2.57.4",
+    "compression": "^1.8.2",
+    "express": "^5.2.1",
     "lucide-react": "^0.446.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "sirv": "^3.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "@types/compression": "^1.8.1",
+    "@types/express": "^5.0.6",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",

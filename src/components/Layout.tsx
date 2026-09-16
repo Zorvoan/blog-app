@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import {
   Layers,
@@ -33,10 +33,19 @@ const NAV_ITEMS: { view: View; label: string; icon: typeof Home }[] = [
 export function Layout({ currentView, onNavigate, children }: LayoutProps) {
   const { user, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [online, setOnlineState] = useState(navigator.onLine);
+  const [online, setOnlineState] = useState(true);
 
-  window.addEventListener("online", () => setOnlineState(true));
-  window.addEventListener("offline", () => setOnlineState(false));
+  useEffect(() => {
+    setOnlineState(navigator.onLine);
+    const onOnline = () => setOnlineState(true);
+    const onOffline = () => setOnlineState(false);
+    window.addEventListener("online", onOnline);
+    window.addEventListener("offline", onOffline);
+    return () => {
+      window.removeEventListener("online", onOnline);
+      window.removeEventListener("offline", onOffline);
+    };
+  }, []);
 
   function handleNavigate(view: View) {
     onNavigate(view);
